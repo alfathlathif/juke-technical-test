@@ -1,5 +1,4 @@
-FROM apache/airflow:2.10.1
+FROM apache/airflow
 RUN pip install --upgrade pip
 USER root
-RUN apt-get update
-RUN apt-get install wget
+RUN apt-get update && apt-get install -y gosu
