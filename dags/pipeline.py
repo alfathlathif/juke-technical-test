@@ -2,6 +2,7 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime
 import pandas as pd
+import pendulum
 
 CUSTOMER_TXT_PATH = '/opt/airflow/dags/Customers.txt'
 ORDER_TXT_PATH = '/opt/airflow/dags/Orders.txt'
