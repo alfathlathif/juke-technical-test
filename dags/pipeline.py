@@ -7,7 +7,7 @@ import pandas as pd
 # File paths
 CUSTOMER_TXT_PATH = '/opt/airflow/dags/Customers.txt'
 ORDER_TXT_PATH = '/opt/airflow/dags/Orders.txt'
-OUTPUT_PATH = '/opt/data/output.csv'
+OUTPUT_PATH = '/opt/airflow/dags/output.csv'
 
 # Default arguments for the DAG
 default_args = {
