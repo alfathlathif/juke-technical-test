@@ -2,23 +2,20 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime
 import pandas as pd
+import pendulum
 
 CUSTOMER_TXT_PATH = '/opt/airflow/dags/Customers.txt'
 ORDER_TXT_PATH = '/opt/airflow/dags/Orders.txt'
 OUTPUT_PATH = '/opt/data/output.csv'
 
-default_args = {
-    'owner': 'airflow',
-    'depends_on_past': False,
-    'start_date': datetime(2024, 9, 12),
-    'retries': 1
-}
 
 dag = DAG(
     'etl_join_orders_customers_txt',
-    default_args=default_args,
+    catchup=False,
     description='ETL DAG to join Orders and Customers data from TXT files',
     schedule_interval='@daily',
+    start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
+    schedule="@daily"
 )
 
 def etl_join():
