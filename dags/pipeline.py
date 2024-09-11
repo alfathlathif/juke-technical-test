@@ -1,0 +1,37 @@
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from datetime import datetime
+import pandas as pd
+
+CUSTOMER_TXT_PATH = '/opt/airflow/dags/Customers.txt'
+ORDER_TXT_PATH = '/opt/airflow/dags/Orders.txt'
+OUTPUT_PATH = '/opt/data/output.csv'
+
+default_args = {
+    'owner': 'airflow',
+    'depends_on_past': False,
+    'start_date': datetime(2024, 9, 12),
+    'retries': 1
+}
+
+dag = DAG(
+    'etl_join_orders_customers_txt',
+    default_args=default_args,
+    description='ETL DAG to join Orders and Customers data from TXT files',
+    schedule_interval='@once',
+)
+
+def etl_join():
+    customers = pd.read_csv(CUSTOMER_TXT_PATH, delimiter=';')
+    orders = pd.read_csv(ORDER_TXT_PATH, delimiter='|')
+    joined_data = pd.merge(orders, customers, on='CustomerID', how='left')
+    joined_data.to_csv(OUTPUT_PATH, index=False)
+    print(f"Data successfully joined and exported to {OUTPUT_PATH}")
+
+etl_task = PythonOperator(
+    task_id='etl_join_orders_customers_txt',
+    python_callable=etl_join,
+    dag=dag,
+)
+
+etl_task
