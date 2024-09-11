@@ -22,10 +22,18 @@ dag = DAG(
 )
 
 def etl_join():
+    print(f"Reading customers from {CUSTOMER_TXT_PATH}")
     customers = pd.read_csv(CUSTOMER_TXT_PATH, delimiter=';')
+    
+    print(f"Reading orders from {ORDER_TXT_PATH}")
     orders = pd.read_csv(ORDER_TXT_PATH, delimiter='|')
+    
+    print("Merging orders and customers")
     joined_data = pd.merge(orders, customers, on='CustomerID', how='left')
+    
+    print(f"Saving output to {OUTPUT_PATH}")
     joined_data.to_csv(OUTPUT_PATH, index=False)
+    
     print(f"Data successfully joined and exported to {OUTPUT_PATH}")
 
 etl_task = PythonOperator(
